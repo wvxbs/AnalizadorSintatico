@@ -55,11 +55,6 @@ write_stmt
    : 'WRITE' expr_list
    ;
 
-id_list
-   : id_list ',' ident
-   | ident
-   ;
-
 expr_list
    : expr_list ',' expr
    | expr
