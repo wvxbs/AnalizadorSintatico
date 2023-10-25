@@ -1,4 +1,4 @@
-# AnalizadorSintatico
+# Analizador Sintatico
 analisador sintático para a linguagem Tiny, feito com ANTLR.
 
 ## Para rodar:
