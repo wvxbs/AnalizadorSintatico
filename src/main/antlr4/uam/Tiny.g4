@@ -1,97 +1,97 @@
-/*
-BSD License
-Copyright (c) 2016, Tom Everett
-All rights reserved.
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions
-are met:
-1. Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-2. Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-3. Neither the name of Tom Everett nor the names of its contributors
-   may be used to endorse or promote products derived from this software
-   without specific prior written permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+grammar Tiny;
 
-grammar tiny;
-
-program
-   : 'BEGIN' stmt_list 'END' EOF
+programa
+   : decl_sequencia + EOF
    ;
 
-stmt_list
-   : stmt_list stmt
-   | stmt
+decl_sequencia
+   : decl_sequencia ';' declaracao
+   | declaracao
    ;
 
-stmt
-   : assign_stmt
-   | read_stmt
-   | write_stmt
+declaracao
+   : cond_decl
+   | repet_decl
+   | atrib_decl
+   | leit_decl
+   | escr_decl
    ;
 
-assign_stmt
-   : ident ':=' expr
+cond_decl
+   : 'if' exp 'then' decl_sequencia 'end'
+   | 'if' exp 'then' decl_sequencia 'else' decl_sequencia 'end'
    ;
 
-read_stmt
-   : 'READ' id_list
+repet_decl
+   : 'repeat' decl_sequencia 'until' exp
    ;
 
-write_stmt
-   : 'WRITE' expr_list
+atrib_decl
+   : identificador ':=' exp
    ;
 
-expr_list
-   : expr_list ',' expr
-   | expr
+leit_decl
+   : 'read' identificador
    ;
 
-expr
-   : expr op factor
-   | factor
+escr_decl
+   : 'write' exp
    ;
 
-factor
-   : ident
-   | integer
+exp
+   : exp_simples comp_op exp_simples
+   | exp_simples
    ;
 
-integer
-   : '-'? NUMBER
+comp_op
+   : '<'
+   | '='
    ;
 
-op
+exp_simples
+   : exp_simples soma termo
+   | termo
+   ;
+
+soma
    : '+'
    | '-'
    ;
 
-ident
-   : ID
+termo
+   : termo mult fator
+   | fator
+   ;
+
+mult
+   : '*'
+   | '/'
+   ;
+
+fator
+   : '(' exp ')'
+   | numero
+   | identificador
    ;
 
 
-ID
-   : ('a' .. 'z' | 'A' .. 'Z')+
+identificador
+   : STRING
    ;
 
-NUMBER
-   : ('0' .. '9')+
+numero
+   : INT
+   ;
+
+
+STRING
+   : [a-z]+
+   ;
+
+INT
+   : [0-9]+
    ;
 
 WS
-   : [ \r\n] -> skip
-   ;
+   : [ \r\n\t] -> skip
+    ;
