@@ -25,3 +25,4 @@ replay_pid*
 
 #antlr generated files
 target/generated-sources
+test.lang
